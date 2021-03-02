@@ -1,7 +1,7 @@
 OFX Parser
 =================
 
-[![Build Status](https://travis-ci.org/asgrim/ofxparser.svg?branch=master)](https://travis-ci.org/asgrim/ofxparser) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/asgrim/ofxparser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/asgrim/ofxparser/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/asgrim/ofxparser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/asgrim/ofxparser/?branch=master) [![Latest Stable Version](https://poser.pugx.org/asgrim/ofxparser/v/stable)](https://packagist.org/packages/asgrim/ofxparser) [![License](https://poser.pugx.org/asgrim/ofxparser/license)](https://packagist.org/packages/asgrim/ofxparser)
+[![Build Status](https://travis-ci.org/jacques/ofxparser.svg?branch=master)](https://travis-ci.org/jacques/ofxparser) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jacques/ofxparser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jacques/ofxparser/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/jacques/ofxparser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jacques/ofxparser/?branch=master) [![Latest Stable Version](https://poser.pugx.org/jacques/ofxparser/v/stable)](https://packagist.org/packages/jacques/ofxparser) [![License](https://poser.pugx.org/jacques/ofxparser/license)](https://packagist.org/packages/jacques/ofxparser)
 
 OFX Parser is a PHP library designed to parse an OFX file downloaded from a financial institution into simple PHP objects.
 
@@ -12,7 +12,7 @@ It supports multiple Bank Accounts, the required "Sign On" response, and recogni
 Simply require the package using [Composer](https://getcomposer.org/):
 
 ```bash
-$ composer require asgrim/ofxparser
+$ composer require jacques/ofxparser
 ```
 
 ## Usage
