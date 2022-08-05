@@ -1,0 +1,11 @@
+{
+  "linters": {
+    "composer": {
+      "type": "composer"
+    },
+    "php": {
+      "type": "php",
+      "include": "(\\.php$)"
+    }
+  }
+}
