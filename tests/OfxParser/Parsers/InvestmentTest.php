@@ -8,9 +8,9 @@ use OfxParser\Parsers\Investment as InvestmentParser;
 /**
  * @covers OfxParser\Parsers\Investment
  */
-class InvestmentTest extends TestCase
+final class InvestmentTest extends TestCase
 {
-    public function testParseInvestmentsXML()
+    public function testParseInvestmentsXML(): void
     {
         $parser = new InvestmentParser();
         $ofx = $parser->loadFromFile(__DIR__ . '/../../fixtures/ofxdata-investments-xml.ofx');
@@ -21,8 +21,8 @@ class InvestmentTest extends TestCase
         self::assertSame('1234567890', $account->accountNumber);
 
         // Check some transactions:
-        $expected = array(
-            '100100' => array(
+        $expected = [
+            '100100' => [
                 'tradeDate' => new \DateTime('2010-01-01'),
                 'settlementDate' => new \DateTime('2010-01-02'),
                 'securityId' => '122022322',
@@ -32,8 +32,8 @@ class InvestmentTest extends TestCase
                 'total' => '-1000.0',
                 'buyType' => 'BUY',
                 'actionCode' => 'BUYMF',
-            ),
-            '100200' => array(
+            ],
+            '100200' => [
                 'tradeDate' => new \DateTime('2011-02-01'),
                 'settlementDate' => new \DateTime('2011-02-03'),
                 'securityId' => '355055155',
@@ -43,8 +43,8 @@ class InvestmentTest extends TestCase
                 'total' => '-545.88',
                 'buyType' => 'BUY',
                 'actionCode' => 'BUYSTOCK',
-            ),
-            '100300' => array(
+            ],
+            '100300' => [
                 'tradeDate' => new \DateTime('2010-01-01'),
                 'settlementDate' => new \DateTime('2010-01-01'),
                 'securityId' => '122022322',
@@ -54,8 +54,8 @@ class InvestmentTest extends TestCase
                 'total' => '1000.0',
                 'sellType' => 'SELL',
                 'actionCode' => 'SELLMF',
-            ),
-            '200100' => array(
+            ],
+            '200100' => [
                 'tradeDate' => new \DateTime('2011-02-01'),
                 'settlementDate' => new \DateTime('2011-02-01'),
                 'securityId' => '822722622',
@@ -67,8 +67,8 @@ class InvestmentTest extends TestCase
                 'subAccountSec' => 'CASH',
                 'subAccountFund' => 'CASH',
                 'actionCode' => 'INCOME',
-            ),
-            '200200' => array(
+            ],
+            '200200' => [
                 'tradeDate' => new \DateTime('2011-02-01'),
                 'settlementDate' => new \DateTime('2011-02-01'),
                 'securityId' => '355055155',
@@ -80,23 +80,21 @@ class InvestmentTest extends TestCase
                 'subAccountSec' => 'CASH',
                 'subAccountFund' => '',
                 'actionCode' => 'REINVEST',
-            ),
-            '300100' => array(
+            ],
+            '300100' => [
                 'date' => new \DateTime('2010-01-15'),
                 'type' => 'OTHER',
                 'amount' => 1234.56,
                 'actionCode' => 'INVBANKTRAN',
-            ),
-        );
+            ],
+        ];
 
-        if (count($expected)) {
-            self::assertTrue(count($account->statement->transactions) > 0);
-        }
+        self::assertGreaterThan(0, count($account->statement->transactions));
 
         $this->validateTransactions($account->statement->transactions, $expected);
     }
 
-    public function testParseInvestmentsXMLOneLine()
+    public function testParseInvestmentsXMLOneLine(): void
     {
         $parser = new InvestmentParser();
         $ofx = $parser->loadFromFile(__DIR__ . '/../../fixtures/ofxdata-investments-oneline-xml.ofx');
@@ -128,7 +126,7 @@ class InvestmentTest extends TestCase
         $this->validateTransactions($account->statement->transactions, $expected);
     }
 
-    public function testParseInvestmentsXMLMultipleAccounts()
+    public function testParseInvestmentsXMLMultipleAccounts(): void
     {
         $parser = new InvestmentParser();
         $ofx = $parser->loadFromFile(__DIR__ . '/../../fixtures/ofxdata-investments-multiple-accounts-xml.ofx');
@@ -178,7 +176,7 @@ class InvestmentTest extends TestCase
         }
     }
 
-    public function testGoogleFinanceInvestments()
+    public function testGoogleFinanceInvestments(): void
     {
         $parser = new InvestmentParser();
         $ofx = $parser->loadFromFile(__DIR__ . '/../../fixtures/ofxdata-google.ofx');

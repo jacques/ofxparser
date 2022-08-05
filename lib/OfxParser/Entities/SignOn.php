@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParser\Entities;
 
-class SignOn extends AbstractEntity
+final class SignOn extends AbstractEntity
 {
     /**
      * @var Status

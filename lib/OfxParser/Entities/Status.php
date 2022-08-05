@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParser\Entities;
 
-class Status extends AbstractEntity
+final class Status extends AbstractEntity
 {
     /**
      * @var string[]

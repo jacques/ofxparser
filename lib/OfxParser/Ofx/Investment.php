@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParser\Ofx;
 
@@ -15,7 +15,7 @@ use OfxParser\Entities\Investment\Transaction\Income;
 use OfxParser\Entities\Investment\Transaction\Reinvest;
 use OfxParser\Entities\Investment\Transaction\SellMutualFund;
 
-class Investment extends Ofx
+final class Investment extends Ofx
 {
     /**
      * @param SimpleXMLElement $xml
@@ -25,7 +25,7 @@ class Investment extends Ofx
     {
         $this->signOn = $this->buildSignOn($xml->SIGNONMSGSRSV1->SONRS);
 
-        if (isset($xml->INVSTMTMSGSRSV1)) {
+        if (property_exists($xml, 'INVSTMTMSGSRSV1') && $xml->INVSTMTMSGSRSV1 !== null) {
             $this->bankAccounts = $this->buildAccounts($xml);
         }
 
@@ -40,7 +40,7 @@ class Investment extends Ofx
      * @return array Array of InvestmentAccount enities
      * @throws \Exception
      */
-    protected function buildAccounts(SimpleXMLElement $xml)
+    protected function buildAccounts(SimpleXMLElement $xml): array
     {
         // Loop through the bank accounts
         $accounts = [];
@@ -58,7 +58,7 @@ class Investment extends Ofx
      * @return InvestmentAccount
      * @throws \Exception
      */
-    protected function buildAccount($transactionUid, SimpleXMLElement $statementResponse)
+    protected function buildAccount(?SimpleXMLElement $transactionUid, SimpleXMLElement $statementResponse): InvestmentAccount
     {
         $account = new InvestmentAccount();
         $account->transactionUid = (string) $transactionUid;
@@ -88,10 +88,10 @@ class Investment extends Ofx
      * others.
      *
      * @param SimpleXMLElement $transactions
-     * @return array
      * @throws \Exception
+     * @return \OfxParser\Entities\Investment\Transaction\Banking[]|\OfxParser\Entities\Investment\Transaction\BuySecurity[]|\OfxParser\Entities\Investment\Transaction\Income[]|\OfxParser\Entities\Investment\Transaction\SellMutualFund[]
      */
-    protected function buildTransactions(SimpleXMLElement $transactions)
+    protected function buildTransactions(SimpleXMLElement $transactions): array
     {
         $activity = [];
 

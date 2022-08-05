@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParserTest\Entities;
 
@@ -56,13 +56,15 @@ class InvestmentValid extends InvestmentNoLoadOfx
 /**
  * @covers OfxParser\Entities\Investment
  */
-class InvestmentTest extends TestCase
+final class InvestmentTest extends TestCase
 {
     /**
      * @expectedException \Exception
      */
-    public function testLoadOfxException()
+    public function testLoadOfxException(): void
     {
+        static::expectException(\Exception::class);
+
         $xml = new SimpleXMLElement('<xml></xml>');
         $entity = new InvestmentNoLoadOfx();
         $entity->loadOfx($xml);
@@ -71,7 +73,7 @@ class InvestmentTest extends TestCase
     /**
      * If no exception thrown, we're good.
      */
-    public function testLoadOfxValid()
+    public function testLoadOfxValid(): void
     {
         $xml = new SimpleXMLElement('<xml></xml>');
         $entity = new InvestmentValid();
@@ -82,12 +84,12 @@ class InvestmentTest extends TestCase
     /**
      * If no exception thrown, we're good.
      */
-    public function testGetProperties()
+    public function testGetProperties(): void
     {
-        $expectedProps = array(
+        $expectedProps = [
             'public1',
             'protected1',
-        );
+        ];
 
         $entity = new InvestmentValid();
         $actualProps = $entity->getProperties();

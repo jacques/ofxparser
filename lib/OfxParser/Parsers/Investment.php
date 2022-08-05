@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParser\Parsers;
 
@@ -13,7 +13,7 @@ class Investment extends Parser
      * @param SimpleXMLElement $xml
      * @return InvestmentOfx
      */
-    protected function createOfx(SimpleXMLElement $xml)
+    protected function createOfx(SimpleXMLElement $xml): InvestmentOfx
     {
         return new InvestmentOfx($xml);
     }

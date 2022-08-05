@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParser;
 
@@ -13,14 +13,14 @@ use SimpleXMLElement;
  * @author James Titcumb <hello@jamestitcumb.com>
  * @author Oliver Lowe <mrtriangle@gmail.com>
  */
-class Parser
+final class Parser
 {
     /**
      * Factory to extend support for OFX document structures.
      * @param SimpleXMLElement $xml
-     * @return Ofx
+     * @return \OfxParser\Ofx
      */
-    protected function createOfx(SimpleXMLElement $xml)
+    private function createOfx(SimpleXMLElement $xml): \OfxParser\Ofx
     {
         return new Ofx($xml);
     }
@@ -29,10 +29,10 @@ class Parser
      * Load an OFX file into this parser by way of a filename
      *
      * @param string $ofxFile A path that can be loaded with file_get_contents
-     * @return Ofx
      * @throws \InvalidArgumentException
+     * @return \OfxParser\Ofx
      */
-    public function loadFromFile($ofxFile)
+    public function loadFromFile(string $ofxFile): \OfxParser\Ofx
     {
         if (!file_exists($ofxFile)) {
             throw new \InvalidArgumentException("File '{$ofxFile}' could not be found");
@@ -45,9 +45,9 @@ class Parser
      * Load an OFX by directly using the text content
      *
      * @param string $ofxContent
-     * @return  Ofx
+     * @return \OfxParser\Ofx
      */
-    public function loadFromString($ofxContent)
+    public function loadFromString(string $ofxContent): \OfxParser\Ofx
     {
         $ofxContent = str_replace(["\r\n", "\r"], "\n", $ofxContent);
         $ofxContent = utf8_encode($ofxContent);
@@ -78,7 +78,7 @@ class Parser
      * @param string $ofxContent
      * @return string
      */
-    private function conditionallyAddNewlines($ofxContent)
+    private function conditionallyAddNewlines(string $ofxContent): string
     {
         if (preg_match('/<OFX>.*<\/OFX>/', $ofxContent) === 1) {
             return str_replace('<', "\n<", $ofxContent); // add line breaks to allow XML to parse
@@ -94,7 +94,7 @@ class Parser
      * @throws \RuntimeException
      * @return \SimpleXMLElement
      */
-    private function xmlLoadString($xmlString)
+    private function xmlLoadString(string $xmlString): \SimpleXMLElement
     {
         libxml_clear_errors();
         libxml_use_internal_errors(true);
@@ -113,7 +113,7 @@ class Parser
      * @param string $line
      * @return string
      */
-    private function closeUnclosedXmlTags($line)
+    private function closeUnclosedXmlTags(string $line): string
     {
         // Special case discovered where empty content tag wasn't closed
         $line = trim($line);
@@ -141,7 +141,7 @@ class Parser
      * @param int $sgmlStart
      * @return array
      */
-    private function parseHeader($ofxHeader)
+    private function parseHeader($ofxHeader): array
     {
         $header = [];
 
@@ -180,7 +180,7 @@ class Parser
      * @param string $sgml
      * @return string
      */
-    private function convertSgmlToXml($sgml)
+    private function convertSgmlToXml(string $sgml): string
     {
         $sgml = preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', $sgml);
 

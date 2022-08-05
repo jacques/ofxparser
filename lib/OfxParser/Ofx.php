@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParser;
 
@@ -64,9 +64,9 @@ class Ofx
         $this->signOn = $this->buildSignOn($xml->SIGNONMSGSRSV1->SONRS);
         $this->signupAccountInfo = $this->buildAccountInfo($xml->SIGNUPMSGSRSV1->ACCTINFOTRNRS);
 
-        if (isset($xml->BANKMSGSRSV1)) {
+        if (property_exists($xml, 'BANKMSGSRSV1') && $xml->BANKMSGSRSV1 !== null) {
             $this->bankAccounts = $this->buildBankAccounts($xml);
-        } elseif (isset($xml->CREDITCARDMSGSRSV1)) {
+        } elseif (property_exists($xml, 'CREDITCARDMSGSRSV1') && $xml->CREDITCARDMSGSRSV1 !== null) {
             $this->bankAccounts = $this->buildCreditAccounts($xml);
         }
 
@@ -79,10 +79,10 @@ class Ofx
     /**
      * Get the transactions that have been processed
      *
-     * @return array
+     * @return \OfxParser\Entities\Transaction[]
      * @deprecated This will be removed in future versions
      */
-    public function getTransactions()
+    public function getTransactions(): array
     {
         return $this->bankAccount->statement->transactions;
     }
@@ -91,7 +91,7 @@ class Ofx
      * @param array $header
      * @return Ofx
      */
-    public function buildHeader(array $header)
+    public function buildHeader(array $header): self
     {
         $this->header = $header;
 
@@ -100,10 +100,10 @@ class Ofx
 
     /**
      * @param SimpleXMLElement $xml
-     * @return SignOn
+     * @return \OfxParser\Entities\SignOn
      * @throws \Exception
      */
-    protected function buildSignOn(SimpleXMLElement $xml)
+    protected function buildSignOn(SimpleXMLElement $xml): \OfxParser\Entities\SignOn
     {
         $signOn = new SignOn();
         $signOn->status = $this->buildStatus($xml->STATUS);
@@ -121,9 +121,13 @@ class Ofx
      * @param SimpleXMLElement|null $xml
      * @return array AccountInfo
      */
-    private function buildAccountInfo(SimpleXMLElement $xml = null)
+    private function buildAccountInfo(SimpleXMLElement $xml = null): array
     {
-        if (null === $xml || !isset($xml->ACCTINFO)) {
+        if (null === $xml) {
+            return [];
+        }
+
+        if (!(property_exists($xml, 'ACCTINFO') && $xml->ACCTINFO !== null)) {
             return [];
         }
 
@@ -140,10 +144,10 @@ class Ofx
 
     /**
      * @param SimpleXMLElement $xml
-     * @return array
      * @throws \Exception
+     * @return \OfxParser\Entities\BankAccount[]
      */
-    private function buildCreditAccounts(SimpleXMLElement $xml)
+    private function buildCreditAccounts(SimpleXMLElement $xml): array
     {
         // Loop through the bank accounts
         $bankAccounts = [];
@@ -156,10 +160,10 @@ class Ofx
 
     /**
      * @param SimpleXMLElement $xml
-     * @return array
      * @throws \Exception
+     * @return \OfxParser\Entities\BankAccount[]
      */
-    private function buildBankAccounts(SimpleXMLElement $xml)
+    private function buildBankAccounts(SimpleXMLElement $xml): array
     {
         // Loop through the bank accounts
         $bankAccounts = [];
@@ -174,10 +178,10 @@ class Ofx
     /**
      * @param string $transactionUid
      * @param SimpleXMLElement $statementResponse
-     * @return BankAccount
      * @throws \Exception
+     * @return \OfxParser\Entities\BankAccount
      */
-    private function buildBankAccount($transactionUid, SimpleXMLElement $statementResponse)
+    private function buildBankAccount(?\SimpleXMLElement $transactionUid, SimpleXMLElement $statementResponse): \OfxParser\Entities\BankAccount
     {
         $bankAccount = new BankAccount();
         $bankAccount->transactionUid = $transactionUid;
@@ -211,10 +215,10 @@ class Ofx
 
     /**
      * @param SimpleXMLElement $xml
-     * @return BankAccount
      * @throws \Exception
+     * @return \OfxParser\Entities\BankAccount
      */
-    private function buildCreditAccount(SimpleXMLElement $xml)
+    private function buildCreditAccount(SimpleXMLElement $xml): \OfxParser\Entities\BankAccount
     {
         $nodeName = 'CCACCTFROM';
         if (!isset($xml->CCSTMTRS->$nodeName)) {
@@ -241,10 +245,10 @@ class Ofx
 
     /**
      * @param SimpleXMLElement $transactions
-     * @return array
      * @throws \Exception
+     * @return \OfxParser\Entities\Transaction[]
      */
-    private function buildTransactions(SimpleXMLElement $transactions)
+    private function buildTransactions(SimpleXMLElement $transactions): array
     {
         $return = [];
         foreach ($transactions as $t) {
@@ -268,9 +272,9 @@ class Ofx
 
     /**
      * @param SimpleXMLElement $xml
-     * @return Status
+     * @return \OfxParser\Entities\Status
      */
-    private function buildStatus(SimpleXMLElement $xml)
+    private function buildStatus(SimpleXMLElement $xml): \OfxParser\Entities\Status
     {
         $status = new Status();
         $status->code = $xml->CODE;

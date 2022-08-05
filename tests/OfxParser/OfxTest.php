@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OfxParserTest;
 
@@ -8,14 +8,14 @@ use OfxParser\Ofx;
 /**
  * @covers OfxParser\Ofx
  */
-class OfxTest extends TestCase
+final class OfxTest extends TestCase
 {
     /**
      * @var \SimpleXMLElement
      */
-    protected $ofxData;
+    protected \SimpleXMLElement $ofxData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $ofxFile = dirname(__DIR__).'/fixtures/ofxdata-xml.ofx';
 
@@ -25,7 +25,7 @@ class OfxTest extends TestCase
         $this->ofxData = simplexml_load_string(file_get_contents($ofxFile));
     }
 
-    public function testBuildsSignOn()
+    public function testBuildsSignOn(): void
     {
         $ofx = new Ofx($this->ofxData);
         self::assertEquals('', $ofx->signOn->status->message);
@@ -33,13 +33,13 @@ class OfxTest extends TestCase
         self::assertEquals('INFO', $ofx->signOn->status->severity);
         self::assertEquals('Success', $ofx->signOn->status->codeDesc);
 
-        self::assertInstanceOf('DateTime', $ofx->signOn->date);
+        self::assertInstanceOf(\DateTime::class, $ofx->signOn->date);
         self::assertEquals('ENG', $ofx->signOn->language);
         self::assertEquals('MYBANK', $ofx->signOn->institute->name);
         self::assertEquals('01234', $ofx->signOn->institute->id);
     }
 
-    public function testBuildsMultipleBankAccounts()
+    public function testBuildsMultipleBankAccounts(): void
     {
         $multiOfxFile = dirname(__DIR__).'/fixtures/ofx-multiple-accounts-xml.ofx';
         if (!file_exists($multiOfxFile)) {
@@ -52,7 +52,7 @@ class OfxTest extends TestCase
         self::assertEmpty($ofx->bankAccount);
     }
 
-    public function testBuildsBankAccount()
+    public function testBuildsBankAccount(): void
     {
         $Ofx = new Ofx($this->ofxData);
 
@@ -115,8 +115,8 @@ class OfxTest extends TestCase
             self::assertEquals($expectedTransactions[$i]['memo'], $transaction->memo);
             self::assertEquals($expectedTransactions[$i]['sic'], $transaction->sic);
             self::assertEquals($expectedTransactions[$i]['checkNumber'], $transaction->checkNumber);
-            self::assertInstanceOf('DateTime', $transaction->date);
-            self::assertInstanceOf('DateTime', $transaction->userInitiatedDate);
+            self::assertInstanceOf(\DateTime::class, $transaction->date);
+            self::assertInstanceOf(\DateTime::class, $transaction->userInitiatedDate);
         }
     }
 }
